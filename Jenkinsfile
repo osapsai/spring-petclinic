@@ -42,8 +42,8 @@ pipeline {
                 input 'Deploy to Production?'
                 milestone(1)
                 script {
-                         sh 'ansible-playbook -i inv.ini pre_deploy_prod.yml'
-                         sh 'ansible-playbook -i inv.ini deploy_prod.yml'
+                         sh 'ansible-playbook -u root -i inv.ini pre_deploy_prod.yml'
+                         sh 'ansible-playbook -u root -i inv.ini deploy_prod.yml'
 				}
             }
         }
