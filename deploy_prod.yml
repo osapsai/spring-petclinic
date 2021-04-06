@@ -2,7 +2,7 @@
 - hosts: app_server
   become: yes
   remote_user: root
-  become_user: root
+#  become_user: root
   tasks:
     - name: stop spring-petclinic
       shell: "docker stop spring-petclinic"
