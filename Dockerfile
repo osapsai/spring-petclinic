@@ -1,13 +1,5 @@
-FROM maven:3.6.3-jdk-8 AS build-env
-WORKDIR /app 
-COPY pom.xml ./ 
-RUN mvn dependency:go-offline 
-RUN mvn spring-javaformat:help 
-COPY . ./ 
-RUN mvn spring-javaformat:apply 
-RUN mvn package -DfinalName=petclinic 
-FROM openjdk:8-jre-alpine 
-EXPOSE 8080 
-WORKDIR /app 
-COPY --from=build-env /app/target/petclinic.jar ./petclinic.jar 
-CMD ["/usr/bin/java", "-jar", "/app/petclinic.jar"] 
+FROM java:8
+VOLUME /tmp
+ADD target/spring-petclinic-2.4.2.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
