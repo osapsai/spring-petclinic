@@ -4,11 +4,8 @@
   remote_user: root
 #  become_user: root
   tasks:
-    - name: stop spring-petclinic
-      shell: "docker stop spring-petclinic"
-      
-    - name: rm spring-petclinic
-      shell: "docker rm spring-petclinic"
+    - name: pull spring-petclinic
+      shell: "docker pull pushkin13/spring-petclinic:latest"
       
     - name: run spring-petclinic
       shell: "docker run --restart always --name spring-petclinic -p 8080:8080 -d pushkin13/spring-petclinic:latest"
