@@ -42,7 +42,11 @@ pipeline {
    
         stage ('Deploy') {
             steps {
-                sh 'ansible-playbook -i inv.ini deploy_prod.yml'
+                input 'Deploy to Production?'
+                milestone(1)
+                script {
+                         sh 'ansible-playbook -i inv.ini deploy_prod.yml'
+				}
             }
         }
     }
