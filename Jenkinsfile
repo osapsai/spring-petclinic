@@ -44,12 +44,12 @@ pipeline {
 		    script {
                         sh "sshpass -v ssh -i /var/lib/jenkins/pey.pem -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker pull pushkin13/spring-petclinic:${env.BUILD_NUMBER}\""
                         try {
-                            sh "sshpass -v ssh -i /var/lib/jenkins/pey.pem -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker stop train-schedule\""
-                            sh "sshpass -v ssh -i /var/lib/jenkins/pey.pem -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker rm train-schedule\""
+                            sh "sshpass -v ssh -i /var/lib/jenkins/pey.pem -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker stop spring-petclinic\""
+                            sh "sshpass -v ssh -i /var/lib/jenkins/pey.pem -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker rm spring-petclinic\""
                         } catch (err) {
                             echo: 'caught error: $err'
                         }
-                        sh "sshpass -v ssh -i /var/lib/jenkins/pey.pem -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker run --restart always --name train-schedule -p 8080:8080 -d pushkin13/spring-petclinic:${env.BUILD_NUMBER}\""
+                        sh "sshpass -v ssh -i /var/lib/jenkins/pey.pem -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker run --restart always --name spring-petclinic -p 8080:8080 -d pushkin13/spring-petclinic:${env.BUILD_NUMBER}\""
                     }
             }
 	}
