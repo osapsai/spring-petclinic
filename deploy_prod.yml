@@ -1,8 +1,8 @@
 ---
 - hosts: app_server
   become: yes
-  remote_user: root
-#  become_user: root
+  remote_user: ec2-user
+  become_user: root
   tasks:
     - name: pull spring-petclinic
       shell: "docker pull pushkin13/spring-petclinic:latest"
