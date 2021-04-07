@@ -41,8 +41,7 @@ pipeline {
             steps {
                 input 'Deploy to Production?'
                 milestone(1)
-				sshagent(credentials : ['prod_login']) {
-					script {
+		    script {
                         sh "sshpass -v ssh -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker pull pushkin13/spring-petclinic:${env.BUILD_NUMBER}\""
                         try {
                             sh "sshpass -v ssh -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker stop train-schedule\""
@@ -52,7 +51,6 @@ pipeline {
                         }
                         sh "sshpass -v ssh -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker run --restart always --name train-schedule -p 8080:8080 -d pushkin13/spring-petclinic:${env.BUILD_NUMBER}\""
                     }
-                }
             }
 	}
     }
