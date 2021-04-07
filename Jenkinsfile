@@ -37,15 +37,23 @@ pipeline {
             }
         }
    
-        stage ('Deploy') {
+        stage('DeployToProduction') {
             steps {
                 input 'Deploy to Production?'
                 milestone(1)
-                script {
-                         sh 'ansible-playbook -u root -i inv.ini pre_deploy_prod.yml'
-                         sh 'ansible-playbook -u root -i inv.ini deploy_prod.yml'
-				}
+                withCredentials([usernamePassword(credentialsId: 'prod_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+                    script {
+                        sh "sshpass -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker pull pushkin13/spring-petclinic:${env.BUILD_NUMBER}\""
+                        try {
+                            sh "sshpass -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker stop train-schedule\""
+                            sh "sshpass -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker rm train-schedule\""
+                        } catch (err) {
+                            echo: 'caught error: $err'
+                        }
+                        sh "sshpass -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker run --restart always --name train-schedule -p 8080:8080 -d pushkin13/spring-petclinic:${env.BUILD_NUMBER}\""
+                    }
+                }
             }
-        }
+	}
     }
 }
