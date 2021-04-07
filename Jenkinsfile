@@ -44,8 +44,8 @@ pipeline {
 		    script {
                         sh "sshpass -v ssh -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker pull pushkin13/spring-petclinic:${env.BUILD_NUMBER}\""
                         try {
-                            sh "sshpass -v ssh -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker stop train-schedule\""
-                            sh "sshpass -v ssh -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker rm train-schedule\""
+                            sh "sshpass -v ssh -i /var/lib/jenkins/pey.pem -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker stop train-schedule\""
+                            sh "sshpass -v ssh -i /var/lib/jenkins/pey.pem -o StrictHostKeyChecking=no ec2-user@$prod_ip \"docker rm train-schedule\""
                         } catch (err) {
                             echo: 'caught error: $err'
                         }
